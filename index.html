@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Contact us</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #e9eef3;
+      --surface: #ffffff;
+      --ink: #16202e;
+      --muted: #5a6778;
+      --line: #b9c4d0;
+      --accent: #0b6e6e;
+      --accent-ink: #ffffff;
+      --error: #b3261e;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2.25rem;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .intro {
+      margin: 0 0 28px;
+      color: var(--muted);
+    }
+
+    form {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 28px;
+    }
+
+    .field + .field { margin-top: 20px; }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px 12px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    input:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    input[aria-invalid="true"] { border-color: var(--error); }
+
+    .error {
+      min-height: 1.25rem;
+      margin: 4px 0 0;
+      font-size: 0.875rem;
+      color: var(--error);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      color: var(--accent-ink);
+      background: var(--accent);
+      border: 0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #095858; }
+
+    .confirmation {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--accent);
+      border-radius: 6px;
+      padding: 28px;
+    }
+
+    .confirmation h2 { margin: 0 0 6px; font-size: 1.5rem; }
+    .confirmation p { margin: 0; color: var(--muted); }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Contact us</h1>
+    <p class="intro">Leave your name and email and we'll get back to you.</p>
+
+    <form id="contact-form" novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" autocomplete="name" required aria-describedby="name-error">
+        <p class="error" id="name-error" role="alert"></p>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" required aria-describedby="email-error">
+        <p class="error" id="email-error" role="alert"></p>
+      </div>
+
+      <button type="submit">Send</button>
+    </form>
+
+    <section class="confirmation" id="confirmation" hidden tabindex="-1">
+      <h2>Sent</h2>
+      <p id="confirmation-text"></p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById('contact-form');
+      var nameInput = document.getElementById('name');
+      var emailInput = document.getElementById('email');
+      var confirmation = document.getElementById('confirmation');
+
+      function setError(input, message) {
+        document.getElementById(input.id + '-error').textContent = message;
+        if (message) {
+          input.setAttribute('aria-invalid', 'true');
+        } else {
+          input.removeAttribute('aria-invalid');
+        }
+      }
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var name = nameInput.value.trim();
+        var email = emailInput.value.trim();
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var valid = true;
+
+        setError(nameInput, name ? '' : 'Enter your name.');
+        setError(emailInput, '');
+
+        if (!name) valid = false;
+
+        if (!email) {
+          setError(emailInput, 'Enter your email address.');
+          valid = false;
+        } else if (!emailPattern.test(email)) {
+          setError(emailInput, 'Enter an email address like name@example.com.');
+          valid = false;
+        }
+
+        if (!valid) {
+          (name ? emailInput : nameInput).focus();
+          return;
+        }
+
+        // TODO: send { name, email } to your backend here (e.g. with fetch).
+        document.getElementById('confirmation-text').textContent =
+          'Thanks, ' + name + '. We\'ll write to ' + email + '.';
+        form.hidden = true;
+        confirmation.hidden = false;
+        confirmation.focus();
+      });
+    })();
+  </script>
+
+  <script type="text/javascript">var utag_data = {};
+  (function(a,b,c,d){a='https://tags.tiqcdn.com/utag/marketingcenter/common/prod/utag.js';
+  b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;
+  a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a); })(); </script>
+  <script type="text/javascript">window.Parameters
+  = window.Parameters || {ExternalUid: 'ypu678intg'}
+  </script>
+</body>
+</html>
